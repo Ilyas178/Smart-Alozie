@@ -2,19 +2,19 @@
 
 @font-face {
   font-family: grifter;
-  src: url(./GRIFTER\ Bold\ 700.otf);
+  src: url("../fonts/GRIFTER Bold 700.otf");
 }
 @font-face {
   font-family: gilory-extra;
-  src: url(FontsFree-Net-Gilroy-ExtraBold.ttf);
+  src: url("../fonts/FontsFree-Net-Gilroy-ExtraBold.ttf");
 }
 @font-face {
   font-family: gilory;
-  src: url(gilroy-regular.ttf);
+  src: url("../fonts/gilroy-regular.ttf");
 }
 @font-face {
   font-family: gilory-semibold;
-  src: url(gilroy-semibold.ttf);
+  src: url("../fonts/gilroy-semibold.ttf");
 }
 
 * {
@@ -23,7 +23,7 @@
   box-sizing: border-box;
 }
 .main-div {
-    background-image: url(herobgimg.png);
+    background-image: url("../images/herobgimg.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -33,7 +33,7 @@
   }
   
   .container {
-    max-width: 950px;
+    max-width: 1140px;
     margin: 0 auto;
     padding: 25px;
   }
