@@ -135,6 +135,31 @@ body {
   --slider-inner-width: calc(100% - 50px); /* Inner width after padding */
 }
 
+/* Desktop: Show all 3 slides fully without cutting */
+@media (min-width: 1025px) {
+  .hero-slider {
+    padding: 12px 0 40px !important; /* No horizontal padding to maximize space */
+    --slider-inner-width: 100% !important; /* Full width */
+    overflow: hidden;
+  }
+  
+  .slides-track {
+    gap: 10px !important; /* Minimal gap to fit all 3 slides */
+    width: max-content !important;
+  }
+  
+  .slide {
+    width: calc((100% - 20px) / 3) !important; /* 3 slides with 2 gaps of 10px each */
+    flex-shrink: 0 !important;
+    min-width: calc((100% - 20px) / 3) !important;
+    max-width: calc((100% - 20px) / 3) !important;
+  }
+  
+  .slider-dots {
+    padding: 0 !important;
+  }
+}
+
 .slides-track {
   display: flex;
   align-items: center;
@@ -385,9 +410,30 @@ button:hover {
   background-size: cover;
   background-repeat: no-repeat;
   height: 680px;
-  border-top-left-radius: 150px;
-  border-top-right-radius: 150px;
+  border-top-left-radius: 90px;
+  border-top-right-radius: 90px;
   margin-top: 300px;
+}
+
+@media (max-width: 900px) {
+  .main-footer-section {
+    border-top-left-radius: 70px;
+    border-top-right-radius: 70px;
+  }
+}
+
+@media (max-width: 520px) {
+  .products-section { 
+    padding-bottom: 36px; 
+  }
+  .products-section .container {
+    padding-bottom: 50px;
+  }
+  .main-footer-section {
+    border-top-left-radius: 48px;
+    border-top-right-radius: 48px;
+    margin-top: 80px;
+  }
 }
 .video-controls {
   padding: 16px;
@@ -890,6 +936,13 @@ font-family: grifter !important;
 .products-section {
   padding: 20px 0 10px;
 }
+.products-section .container {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0 auto;
+}
 .products-section .products-track {
   display: flex;
   gap: 28px;
@@ -908,12 +961,181 @@ font-family: grifter !important;
   overflow: hidden;
   box-shadow: 0 10px 24px rgba(0,0,0,.08);
   scroll-snap-align: center;
+  perspective: 1000px;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+  will-change: transform;
 }
-.prod-card .prod-img { aspect-ratio: 3/4; background:#fff; display:flex; align-items:center; justify-content:center; }
-.prod-card .prod-img img { width: 92%; height: 92%; object-fit: contain; border-radius: 12px; }
-.prod-card .prod-info { background:#5B24AA; color:#fff; padding: 16px 16px; text-align:left; border-bottom-left-radius: 26px; border-bottom-right-radius: 26px; }
-.prod-card .prod-info h4 { font-family: grifter; font-size: 20px; line-height: 24px; font-weight: 800; margin:0 0 4px; text-align: left; }
-.prod-card .prod-info p { font-family: gilory; font-size: 12px; opacity:.9; text-align: left; }
+.prod-card .prod-img { aspect-ratio: 3/4; background:#fff; display:flex; align-items:center; justify-content:center; border-radius: 26px 26px 0 0; }
+.prod-card .prod-img img { width: 92%; height: 92%; object-fit: contain; border-radius: 26px 26px 0 0; }
+.prod-card .flip {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+  cursor: pointer;
+}
+.prod-card.is-flipped .flip { transform: rotateY(180deg); }
+.prod-front, .prod-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 26px 26px 0 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.prod-front { z-index: 2; }
+.prod-back { transform: rotateY(180deg); }
+.back-top {
+  flex: 1;
+  background: #e59a10;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 18px;
+  font-family: gilory;
+}
+.prod-card .prod-info { background:#5B24AA; color:#fff; padding: 16px 16px; text-align:center; border-bottom-left-radius: 26px; border-bottom-right-radius: 26px; }
+.prod-card .prod-info h4 { font-family: grifter; font-size: 22px; line-height: 26px; font-weight: 800; margin:0 0 4px; text-align: center; }
+.prod-card .prod-info p { font-family: gilory; font-size: 13px; opacity:.9; text-align: center; }
+
+/* Active card emphasis */
+.prod-card.active {
+  transform: scale(1.045);
+  box-shadow: 0 16px 36px rgba(0,0,0,.18);
+}
 
 /* Featured phone style */
 /* no featured styling – all cards same */
+
+/* slick slider css */
+
+/* ---------- wrapper (full-width purple curved bottom) ---------- */
+.sk-slider-wrapper{
+  width:100%;
+  box-sizing:border-box;
+  position:relative;
+  border-bottom-left-radius:70px;
+  border-bottom-right-radius:70px;
+  overflow:visible;
+
+}
+
+/* keep slider centered in a max width, but full-bleed background */
+.sk-slider{
+  width:100%;
+  max-width: 100%;   /* change if you want wider central container */
+  margin:0 auto;
+  overflow:hidden;
+  box-sizing:border-box;
+  padding: 0 !important;
+}
+
+/* track holds slides in a row */
+.sk-track{
+  display:flex;
+  align-items:center;
+  transition: transform 500ms ease;
+  will-change: transform;
+  gap:18px; /* visual gap between slides (like screenshot) */
+  box-sizing:border-box;
+}
+
+/* each slide: show exactly 3 in viewport */
+.sk-slide{
+  flex: 0 0 calc((100% - 2 * 18px) / 3); /* subtract track gap space for 3 slides */
+  box-sizing: border-box;
+}
+
+/* image style */
+.sk-slide img{
+  width:100%;
+  height: 347px ;            
+  object-fit:cover;
+  display:block;
+  border-radius:6px;
+}
+
+/* --------- DOTS (screenshot-style: white border + inner yellow + glow) ------------ */
+.sk-dots{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  top: 380px;
+  display:flex;
+  gap:12px;
+  z-index:5;
+}
+
+.sk-dot{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  border:3px solid white;
+  background: rgba(244,215,110,0.0); /* transparent center for inactive */
+  box-sizing:border-box;
+  cursor:pointer;
+  transition: all 220ms ease;
+  display:inline-block;
+}
+
+/* active dot: filled yellow + glow */
+.sk-dot.active{
+  background: #fff;
+  box-shadow:
+    0 0 12px rgba(244,215,110,0.55),
+    0 0 30px rgba(244,215,110,0.25);
+  opacity:1;
+}
+
+/* inactive subtle opacity */
+.sk-dot:not(.active){
+  opacity:0.85;
+}
+
+/* responsive: on small screens show fewer slides */
+@media (max-width: 900px){
+  .sk-slide img{ height:220px; }
+  .sk-slide{ flex: 0 0 calc((100% - 18px) / 2); } /* 2 slides */
+}
+@media (max-width: 520px){
+  .sk-slide img{ height:180px; }
+  .sk-slide{ flex: 0 0 100%; } /* 1 slide */
+  .sk-track{ gap:12px; padding:0 12px; }
+  .sk-dots{ bottom:12px; gap:8px; }
+}
+
+.main-div .container-main {
+  max-width: 100% !important;
+  padding: 0px !important;
+  height: 821.2px;
+}
+
+.navbar {
+  max-width: 1280px;
+  margin: auto;
+  padding: 20px;
+}
+
+@media (min-width: 521px) and (max-width: 900px) {
+  .main-div .container-main {
+    height: 576.2px;
+  }
+  .sk-dots {
+    top: 253px;
+    bottom: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .main-div .container-main {
+    height: 526.2px;
+  }
+  .sk-dots {
+    top: 210px;
+    bottom: auto;
+  }
+}

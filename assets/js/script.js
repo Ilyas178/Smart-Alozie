@@ -205,30 +205,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const spv = getSlidesPerView();
     
     if (spv === 3 && realSlides.length === 3) {
-      // For desktop with 3 slides and infinite loop
-      const slideWidth = slides[0].getBoundingClientRect().width;
+      // For desktop with 3 slides - always show all 3 real slides
+      // Structure: [clone-last (index 0), real-0 (index 1), real-1 (index 2), real-2 (index 3), clone-first (index 4)]
       const gap = getGap();
-      const sliderContainer = track.parentElement;
-      const containerWidth = sliderContainer.getBoundingClientRect().width;
       
-      // Get actual padding from slider container (not track)
-      const containerStyles = getComputedStyle(sliderContainer);
-      const containerPaddingLeft = parseFloat(containerStyles.paddingLeft) || 25;
+      // Get the first clone (index 0) - this is the clone of the last slide
+      const firstClone = slides[0];
+      const firstCloneWidth = firstClone.getBoundingClientRect().width;
       
-      // Find the actual slide element (including clones)
-      // selected = 0 means first real slide, but we need to account for clone at start
-      // Clone at start is index 0, then real slides start at index 1
-      const realSlideIndex = selected + 1; // +1 because clone is at index 0
-      
-      // Calculate position: (realSlideIndex * (slideWidth + gap))
-      const slideAbsolutePosition = containerPaddingLeft + (realSlideIndex * (slideWidth + gap));
-      
-      // Calculate where the center of the viewport is
-      const viewportCenter = containerWidth / 2;
-      
-      // Calculate how much we need to shift the track so selected slide's center aligns with viewport center
-      const slideCenter = slideAbsolutePosition + (slideWidth / 2);
-      const offsetNeeded = slideCenter - viewportCenter;
+      // Calculate offset: move track left by clone width + gap
+      // This positions the first real slide (index 1) at the left edge of container
+      const offsetNeeded = firstCloneWidth + gap;
       
       // Apply transition
       if (smooth) {
@@ -237,31 +224,9 @@ document.addEventListener("DOMContentLoaded", function () {
         track.style.transition = 'none';
       }
       
+      // Position track to show all 3 real slides
       track.style.transform = `translateX(-${offsetNeeded}px)`;
-      
-      // Handle seamless loop - if we're at the clone, jump to real slide
-      setTimeout(() => {
-        const containerPaddingLeft = parseFloat(getComputedStyle(sliderContainer).paddingLeft) || 25;
-        
-        if (realSlideIndex === 0) {
-          // We're at clone-start, jump to last real slide position
-          const lastRealPosition = containerPaddingLeft + (realSlides.length * (slideWidth + gap));
-          const lastSlideCenter = lastRealPosition + (slideWidth / 2);
-          const jumpOffset = lastSlideCenter - viewportCenter;
-          track.style.transition = 'none';
-          track.style.transform = `translateX(-${jumpOffset}px)`;
-        } else if (realSlideIndex === realSlides.length + 1) {
-          // We're at clone-end, jump to first real slide position
-          const firstRealPosition = containerPaddingLeft + (1 * (slideWidth + gap));
-          const firstSlideCenter = firstRealPosition + (slideWidth / 2);
-          const jumpOffset = firstSlideCenter - viewportCenter;
-          track.style.transition = 'none';
-          track.style.transform = `translateX(-${jumpOffset}px)`;
-        }
-        isTransitioning = false;
-      }, smooth ? 600 : 0);
-      
-      isTransitioning = true;
+      isTransitioning = false;
     } else {
       // For mobile/tablet or other cases
     const frameIndex = computeFrameIndex(selected);
@@ -361,6 +326,24 @@ document.addEventListener("DOMContentLoaded", function () {
     track.appendChild(cardEls[i].cloneNode(true));
   }
 
+  // Active slide helper: mark card nearest container center
+  const updateActive = () => {
+    const cards = Array.from(track.children);
+    if (!cards.length) return;
+    const rect = track.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    let best = null;
+    let bestDist = Infinity;
+    cards.forEach(card => {
+      const r = card.getBoundingClientRect();
+      const cardCenter = r.left + r.width / 2;
+      const dist = Math.abs(cardCenter - centerX);
+      if (dist < bestDist) { bestDist = dist; best = card; }
+    });
+    cards.forEach(c => c.classList.remove('active'));
+    if (best) best.classList.add('active');
+  };
+
   // Center featured card on load
   const featured = track.querySelector('.prod-card.featured');
   const centerFeatured = () => {
@@ -387,6 +370,8 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       track.scrollTo({ left: next, behavior: 'smooth' });
     }
+    // After moving, update active (scroll event will also fire)
+    updateActive();
   };
   const startLoop = () => (autoTimer = setInterval(step, 2500));
   const stopLoop = () => clearInterval(autoTimer);
@@ -397,4 +382,231 @@ document.addEventListener("DOMContentLoaded", function () {
   track.addEventListener('mouseleave', startLoop);
   track.addEventListener('touchstart', stopLoop, { passive: true });
   track.addEventListener('touchend', startLoop, { passive: true });
+
+  // Update active on scroll (throttled via rAF)
+  let ticking = false;
+  track.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => { updateActive(); ticking = false; });
+  }, { passive: true });
+
+  // Initial active after paint
+  setTimeout(updateActive, 120);
 });
+
+// Flip card toggle for products
+document.addEventListener("DOMContentLoaded", function () {
+  const productsTrack = document.getElementById('productsTrack');
+  if (!productsTrack) return;
+
+  productsTrack.addEventListener('click', function (e) {
+    const flip = e.target.closest('.flip');
+    if (!flip || !productsTrack.contains(flip)) return;
+    const card = flip.closest('.prod-card');
+    if (!card) return;
+    card.classList.toggle('is-flipped');
+  });
+});
+
+// slick slider js
+
+(function(){
+  // Settings
+  const VISIBLE = 3;           // number of slides visible at once (desktop)
+  const AUTOPLAY_MS = 3000;
+  const TRANSITION_MS = 500;
+  const GAP_PX = 18;           // must match CSS .sk-track gap
+
+  // Elements
+  const track = document.getElementById('skTrack');
+  const dotsWrap = document.getElementById('skDots');
+
+  // Grab original slides (3)
+  const origSlides = Array.from(track.querySelectorAll('.sk-slide'));
+  const UNIQUE_COUNT = origSlides.length; // should be 3
+
+  // Build clones: prepend last VISIBLE slides, append first VISIBLE slides
+  const prependClones = [];
+  const appendClones = [];
+
+  // if UNIQUE_COUNT < VISIBLE, we still clone in circular manner
+  function getIndexWrapped(i){
+    return ((i % UNIQUE_COUNT) + UNIQUE_COUNT) % UNIQUE_COUNT;
+  }
+
+  for (let i = VISIBLE - 1; i >= 0; i--){
+    const idx = getIndexWrapped(i - (VISIBLE - 1));
+    const clone = origSlides[idx].cloneNode(true);
+    clone.classList.add('sk-clone');
+    prependClones.push(clone);
+  }
+  for (let i = 0; i < VISIBLE; i++){
+    const idx = getIndexWrapped(i);
+    const clone = origSlides[idx].cloneNode(true);
+    clone.classList.add('sk-clone');
+    appendClones.push(clone);
+  }
+
+  // Prepend and append clones into track
+  prependClones.forEach(c => track.insertBefore(c, track.firstChild));
+  appendClones.forEach(c => track.appendChild(c));
+
+  // Now compute full slide list
+  let allSlides = Array.from(track.querySelectorAll('.sk-slide')); // includes clones
+
+  // Build dots (one per unique slide)
+  for (let i = 0; i < UNIQUE_COUNT; i++){
+    const d = document.createElement('div');
+    d.className = 'sk-dot' + (i === 0 ? ' active' : '');
+    d.dataset.index = i;
+    dotsWrap.appendChild(d);
+  }
+  const dots = Array.from(dotsWrap.querySelectorAll('.sk-dot'));
+
+  // State
+  // start at the first original slide -> its index in allSlides is prependClones.length
+  let currentIndex = prependClones.length; // integer index into allSlides
+  let isAnimating = false;
+  let autoplayTimer = null;
+
+  // Helpers to get slide width including gap in px
+  function getSlideWidthPx(){
+    // each slide flex-basis computed; measure first visible slide width
+    const slideEl = allSlides[currentIndex];
+    if (!slideEl) return 0;
+    const style = window.getComputedStyle(slideEl);
+    const w = slideEl.getBoundingClientRect().width;
+    // gap in track: use GAP_PX
+    return w + GAP_PX;
+  }
+
+  // Apply transform to move to currentIndex
+  function moveToIndex(index, withTransition = true){
+    if (withTransition){
+      track.style.transition = `transform ${TRANSITION_MS}ms ease`;
+    } else {
+      track.style.transition = 'none';
+    }
+
+    const slideW = getSlideWidthPx();
+    const offset = index * slideW;
+    track.style.transform = `translateX(-${offset}px)`;
+    currentIndex = index;
+    updateDots();
+  }
+
+  // Dots update: active dot corresponds to current original slide
+  function updateDots(){
+    // map currentIndex -> active unique index
+    const realIndex = (currentIndex - prependClones.length) % UNIQUE_COUNT;
+    const idx = (realIndex + UNIQUE_COUNT) % UNIQUE_COUNT;
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+
+  // After move, if we are on clones boundary, jump without transition
+  function handleTransitionEnd(){
+    const total = allSlides.length;
+    // if we've moved past appended clones (to the right boundary)
+    if (currentIndex >= total - VISIBLE){
+      // jump to the same visual slide in the original area
+      const newIndex = currentIndex - UNIQUE_COUNT;
+      moveToIndex(newIndex, false);
+    }
+    // if we've moved to before the prepend clones (to the left)
+    else if (currentIndex < prependClones.length){
+      const newIndex = currentIndex + UNIQUE_COUNT;
+      moveToIndex(newIndex, false);
+    }
+    isAnimating = false;
+  }
+
+  track.addEventListener('transitionend', handleTransitionEnd);
+
+  // Auto-play move by one slide
+  function nextSlide(){
+    if (isAnimating) return;
+    isAnimating = true;
+    moveToIndex(currentIndex + 1, true);
+  }
+
+  function prevSlide(){
+    if (isAnimating) return;
+    isAnimating = true;
+    moveToIndex(currentIndex - 1, true);
+  }
+
+  // Start autoplay
+  function startAutoplay(){
+    if (autoplayTimer) clearInterval(autoplayTimer);
+    autoplayTimer = setInterval(nextSlide, AUTOPLAY_MS);
+  }
+  function stopAutoplay(){
+    if (autoplayTimer) clearInterval(autoplayTimer);
+    autoplayTimer = null;
+  }
+
+  // Dots click
+  dots.forEach(d => {
+    d.addEventListener('click', () => {
+      const targetUnique = Number(d.dataset.index);
+      // compute index in allSlides that corresponds to that unique slide in the original block
+      const targetIndex = prependClones.length + targetUnique;
+      isAnimating = true;
+      moveToIndex(targetIndex, true);
+      startAutoplay();
+    });
+  });
+
+  // Resize handler: recalc slide widths and reposition without transition
+  window.addEventListener('resize', () => {
+    // recompute allSlides in case of style changes
+    allSlides = Array.from(track.querySelectorAll('.sk-slide'));
+    moveToIndex(currentIndex, false);
+  });
+
+  // Init: ensure track has proper transform and start autoplay
+  // Wait a tick so layout is stable
+  setTimeout(() => {
+    allSlides = Array.from(track.querySelectorAll('.sk-slide'));
+    // position to first real slides
+    moveToIndex(currentIndex, false);
+    startAutoplay();
+  }, 50);
+
+  // Pause on hover
+  track.addEventListener('mouseenter', stopAutoplay);
+  track.addEventListener('mouseleave', startAutoplay);
+
+  // Optional: touch support (basic swipe)
+  (function addTouch(){
+    let startX = 0, dx = 0, touching = false;
+    track.addEventListener('touchstart', (e) => {
+      stopAutoplay();
+      touching = true;
+      startX = e.touches[0].clientX;
+      track.style.transition = 'none';
+    }, {passive:true});
+    track.addEventListener('touchmove', (e) => {
+      if(!touching) return;
+      dx = e.touches[0].clientX - startX;
+      const slideW = getSlideWidthPx();
+      const baseOffset = currentIndex * slideW;
+      track.style.transform = `translateX(${ -baseOffset + dx }px)`;
+    }, {passive:true});
+    track.addEventListener('touchend', (e) => {
+      touching = false;
+      const threshold = getSlideWidthPx() * 0.15;
+      if (dx < -threshold) {
+        nextSlide();
+      } else if (dx > threshold) {
+        prevSlide();
+      } else {
+        moveToIndex(currentIndex, true);
+      }
+      dx = 0;
+      startAutoplay();
+    });
+  })();
+
+})();
