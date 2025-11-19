@@ -10,11 +10,12 @@
    <link rel="stylesheet" href="assets/css/global.css">
   </head>
   <body>
-    <!-- first section hero -->
+    
+
+      <!-- first section hero -->
     <div class="main-div">
      
       <div class="container-main">
-        <div class="navbar">
         <div class="header">
           <div class="logonav">
             <a href="index.html"><img src="assets/images/logo.png" alt="Home" /></a>
@@ -34,7 +35,6 @@
             <div></div>
           </div>
         </div>
-        </div>
         <div class="mobile-menu" id="mobileMenu">
           <span class="close-menu" id="closeMenu">&times;</span>
           <div class="navlinkss">
@@ -49,27 +49,40 @@
         </div>
         <div class="hero-section">
           <h1>HEALTHCODE’s Members Earns<br>over $50,000 Monthly</h1>
-              <!-- new slick slider -->
-<!-- SK: Slider (unique classes) -->
-<div class="sk-slider-wrapper">
-  <div class="sk-slider">
-    <div class="sk-track" id="skTrack">
-      <!-- ONLY 3 UNIQUE IMAGES: keep exactly these three -->
-      <div class="sk-slide"><img src="assets/images/slide-1.png" alt=""></div>
-      <div class="sk-slide"><img src="assets/images/slide-2.png" alt=""></div>
-      <div class="sk-slide"><img src="assets/images/slide-3.png" alt=""></div>
-    </div>
-  </div>
-
-  <!-- dots (3 dots for 3 unique slides) -->
-  <div class="sk-dots" id="skDots"></div>
-</div>
-
+          <div class="hero-slider">
+            <div class="slides-track">
+              <div class="slide"><img src="assets/images/slide-1.png" alt="Slide 1" /></div>
+              <div class="slide"><img src="assets/images/slide-2.png" alt="Slide 2" /></div>
+              <div class="slide"><img src="assets/images/slide-3.png" alt="Slide 3" /></div>
+            </div>
+            <div class="slider-dots" role="tablist" aria-label="Hero slider dots">
+              <button class="dot" data-index="0" aria-label="Slide 1"></button>
+              <button class="dot active" data-index="1" aria-label="Slide 2"></button>
+              <button class="dot" data-index="2" aria-label="Slide 3"></button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2>Enter Your Details to Watch the Video</h2>
 
+        <div class="input-group">
+          <input type="text" placeholder="First Name" />
+          <input type="text" placeholder="Last Name" />
+        </div>
+
+        <div class="input-group">
+          <input type="text" placeholder="City" />
+          <input type="text" placeholder="Country" />
+        </div>
+
+        <input type="text" placeholder="WhatsApp Number" />
+        <button class="buttons" onclick="closeModal()">Submit</button>
+      </div>
+    </div>
 
 
     <!-- make-money section (new) placed directly under hero -->
@@ -389,6 +402,7 @@
         <button class="buttons" onclick="closeModal()">Submit</button>
       </div>
     </div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="assets/js/script.js"></script>

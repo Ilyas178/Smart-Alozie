@@ -17,6 +17,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 80%;
+  margin: auto;
+  padding: 20px;
 }
 
 .logonav {
@@ -1374,10 +1377,15 @@ img.youtubeplaybtn {
 /* image style */
 .sk-slide img {
   width: 100%;
-  height: 347px;
+  height: auto;
   object-fit: cover;
   display: block;
-  border-radius: 20px;
+  border-radius: 0;
+}
+
+/* Only the active slide image has rounded corners */
+.sk-slide.sk-active img {
+  border-radius: 25px;
 }
 
 /* --------- DOTS (screenshot-style: white border + inner yellow + glow) ------------ */
@@ -1385,7 +1393,8 @@ img.youtubeplaybtn {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 380px;
+  bottom: 16px;
+  top: auto;
   display: flex;
   gap: 12px;
   z-index: 5;
@@ -1421,7 +1430,7 @@ img.youtubeplaybtn {
 /* responsive: on small screens show fewer slides */
 @media (max-width: 900px) {
   .sk-slide img {
-    height: 220px;
+    height: auto;
   }
 
   .sk-slide {
@@ -1433,7 +1442,7 @@ img.youtubeplaybtn {
 
 @media (max-width: 520px) {
   .sk-slide img {
-    height: 180px;
+    height: auto;
   }
 
   .sk-slide {
@@ -1448,40 +1457,226 @@ img.youtubeplaybtn {
 
   .sk-dots {
     bottom: 12px;
-    gap: 8px;
+    top: auto;
   }
+}
+
+
+.about-content {
+  margin-top: 50px;
+  margin-bottom: 325px;
+}
+
+.about-content h5 {
+  color: #5d1eb4;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: normal;
+  font-family: "Bricolage Grotesque";
+  margin-bottom: 30px;
+}
+
+.about-all-content h6 {
+  border-radius: 10px;
+  border: 1px solid #f19f19;
+  background: rgba(241, 159, 25, 0.15);
+  padding: 16px 18px;
+  color: #3b3b3b;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 400;
+  font-family: gilory-semibold;
+}
+
+.about-all-content p {
+  color: #777;
+  text-align: center;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 38px;
+  font-family: gilory;
+}
+
+span.blue {
+  background: #0433fe;
+  padding: 6px;
+  border-radius: 15px;
+  color: white;
+  font-family: gilory-extra;
+}
+
+span.yellow {
+  background: #f19f19;
+  padding: 8px;
+  border-radius: 15px;
+  color: white;
+  font-family: gilory-extra;
+}
+
+span.weeks {
+  background: #5d1eb4;
+  padding: 8px;
+  border-radius: 15px;
+  color: white;
+  font-family: gilory-extra;
+}
+
+.notediv {
+  border-radius: 50px;
+  background: #fff;
+  box-shadow: 0px 4px 13px 0px rgba(0, 0, 0, 0.1);
+  padding: 14px 28px;
+  color: #777;
+  font-family: "Bricolage Grotesque";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.notedivs {
+  display: flex;
+  gap: 20px;
+}
+
+.about-all-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.about-extra-content h4 {
+  color: #3b3b3b;
+  text-align: center;
+  font-family: "Bricolage Grotesque";
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.modal input,
+.modal select {
+  height: 77.919px;
+  border-radius: 15px;
+  color: #868686;
+  font-family: gilory;
+}
+
+.modal-content h2 {
+  color: #3b3b3b;
+  font-family: "Bricolage Grotesque";
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+  margin-bottom: 40px;
+}
+
+.input-group {
+  display: flex;
+  gap: 18px;
+}
+
+.buttons {
+  color: #000;
+  font-family: "Bricolage Grotesque";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border-radius: 50px;
+  background: #fccf36;
+  display: flex;
+  padding: 17px 37px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  margin-top: 12px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(252, 207, 54, 0.4);
+}
+
+.buttons:hover {
+  background: #ffb800;
+  transform: scale(1.05);
+  box-shadow: 0px 6px 15px rgba(252, 207, 54, 0.6);
+  color: #fff;
+}
+
+.header-buttonss.open-modal.mobile-resp {
+  padding: 14px;
+  border-radius: 70px;
+  background: #ff9f00;
+  text-decoration: none;
+  color: #fff;
+  font-size: 18px;
+  border: 1px solid #ff9f00;
+  font-family: grifter !important;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(11px);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 50px;
+  border-radius: 50px;
+  width: 820px;
+  text-align: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal input,
+.modal select {
+  width: 100%;
+  padding: 20px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background: #f1c40f;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.close-modal {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 50%;
+  position: absolute; 
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 }
 
 .main-div .container-main {
-  max-width: 100% !important;
-  padding: 0px !important;
-  height: 821.2px;
-}
-
-.navbar {
-  max-width: 1280px;
-  margin: auto;
-  padding: 20px;
-}
-
-@media (min-width: 521px) and (max-width: 900px) {
-  .main-div .container-main {
-    height: 576.2px;
-  }
-
-  .sk-dots {
-    top: 253px;
-    bottom: auto;
-  }
-}
-
-@media (max-width: 520px) {
-  .main-div .container-main {
-    height: 526.2px;
-  }
-
-  .sk-dots {
-    top: 210px;
-    bottom: auto;
-  }
+    max-width: 100% !important;
+    margin: 0 auto;
+    padding: 0px !important;
 }
