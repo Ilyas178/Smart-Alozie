@@ -30,6 +30,22 @@
 
 
   @media (max-width: 768px) {
+  /* Mobile: unify vertical spacing for sections */
+  section {
+    padding-top: 30px !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Ensure key sections follow the same spacing */
+  .make-money-section,
+  .success-story-section,
+  .opportunity-section,
+  .why-join-section,
+  .hc-banner-section,
+  .products-section {
+    padding-top: 30px !important;
+    padding-bottom: 0 !important;
+  }
       iframe#youtubeFrame {
           height: 270px;
       }
