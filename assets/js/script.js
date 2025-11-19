@@ -469,6 +469,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentIndex = prependClones.length; // integer index into allSlides
   let isAnimating = false;
   let autoplayTimer = null;
+  const centerOffset = Math.floor(VISIBLE / 2);
 
   // Helpers to get slide width including gap in px
   function getSlideWidthPx(){
@@ -479,6 +480,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const w = slideEl.getBoundingClientRect().width;
     // gap in track: use GAP_PX
     return w + GAP_PX;
+  }
+
+  function updateActiveSlide(){
+    allSlides.forEach(slide => slide.classList.remove('sk-active'));
+    const centerIndex = currentIndex + centerOffset;
+    const target = allSlides[centerIndex];
+    if (target) target.classList.add('sk-active');
   }
 
   // Apply transform to move to currentIndex
@@ -494,6 +502,7 @@ document.addEventListener("DOMContentLoaded", function () {
     track.style.transform = `translateX(-${offset}px)`;
     currentIndex = index;
     updateDots();
+    updateActiveSlide();
   }
 
   // Dots update: active dot corresponds to current original slide

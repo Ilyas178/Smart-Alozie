@@ -7,6 +7,10 @@ body {
   font-family: grifter;
 }
 
+:root {
+  --check-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 640'%3E%3Cpath fill='%2332CD32' d='M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z'/%3E%3C/svg%3E");
+}
+
 
 
 .header {
@@ -415,11 +419,6 @@ span.weeks {
   margin: 5px;
   border-radius: 50%;
 }
-
-button:hover {
-  /* background-color: #cc0000; */
-}
-
 .main-footer-section {
   background-image: url(../images/footerbg.png);
   background-position: center;
@@ -640,8 +639,9 @@ img.youtubeplaybtn {
 
 /* ===== Make Money Section (scoped) ===== */
 .make-money-section {
-  background: #f6f6f6;
-  padding: 70px 0 60px;
+  background: #ffffff;
+  padding-top: 30px;
+  padding-bottom: 0;
 }
 
 .make-money-section .mm-title {
@@ -733,7 +733,8 @@ img.youtubeplaybtn {
 /* ===== Success Story Section (scoped) ===== */
 .success-story-section {
   background: #ffffff;
-  padding: 70px 0 40px;
+  padding-top: 30px;
+  padding-bottom: 0;
 }
 
 .success-story-section .ss-title {
@@ -769,18 +770,6 @@ img.youtubeplaybtn {
   line-height: 34px;
 }
 
-.success-story-section .ss-list li {
-  position: relative;
-  padding-left: 18px;
-}
-
-.success-story-section .ss-list li::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  color: #9a9a9a;
-}
-
 .success-story-section .ss-pill {
   display: inline-block;
   padding: 6px 12px;
@@ -808,7 +797,8 @@ img.youtubeplaybtn {
 /* ===== Opportunity Section (scoped) ===== */
 .opportunity-section {
   background: #ffffff;
-  padding: 70px 0 40px;
+  padding-top: 30px;
+  padding-bottom: 0;
 }
 
 .opportunity-section .op-title {
@@ -844,18 +834,6 @@ img.youtubeplaybtn {
   line-height: 34px;
 }
 
-.opportunity-section .op-list li {
-  position: relative;
-  padding-left: 18px;
-}
-
-.opportunity-section .op-list li::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  color: #9a9a9a;
-}
-
 .opportunity-section .op-pill {
   display: inline-block;
   padding: 6px 12px;
@@ -875,8 +853,9 @@ img.youtubeplaybtn {
 
 /* ===== Why Join Section (scoped) ===== */
 .why-join-section {
-  background: #f6f6f6;
-  padding: 70px 0 60px;
+  background: #ffffff;
+  padding-top: 30px;
+  padding-bottom: 0;
 }
 
 .why-join-section .wj-title {
@@ -920,16 +899,35 @@ img.youtubeplaybtn {
   line-height: 34px;
 }
 
-.why-join-section .wj-list li {
-  position: relative;
-  padding-left: 18px;
+/* Shared checkmark bullet styling */
+.list-check {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
 }
 
-.why-join-section .wj-list li::before {
-  content: "•";
+.list-check li {
+  position: relative;
+  padding-left: 46px;
+  margin-bottom: 12px;
+}
+
+.list-check li::before {
+  content: "";
   position: absolute;
   left: 0;
-  color: #9a9a9a;
+  top: 50%;
+  width: 25px;
+  height: 25px;
+  background-image: var(--check-icon);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transform: translateY(-50%);
+}
+
+.list-check li:last-child {
+  margin-bottom: 0;
 }
 
 /* ===== What Healthcode Is NOT Block ===== */
@@ -1020,7 +1018,8 @@ img.youtubeplaybtn {
 
 /* ===== Healthcode Banner Section (scoped) ===== */
 .hc-banner-section {
-  padding: 30px 0 60px;
+  padding-top: 30px;
+  padding-bottom: 0;
 }
 
 .hc-banner-section .hc-card {
@@ -1118,7 +1117,8 @@ img.youtubeplaybtn {
 
 /* ===== Products Carousel Section (scoped) ===== */
 .products-section {
-  padding: 20px 0 10px;
+  padding-top: 30px;
+  padding-bottom: 0;
 }
 
 .products-section .container {
@@ -1189,6 +1189,35 @@ img.youtubeplaybtn {
   border-radius: 26px 26px 0 0;
 }
 
+.prod-card .prod-img img.prod-fill {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Make only the Terahertz Blower card's front image area fill completely */
+.prod-card.prod-card-fill .prod-front {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.prod-card.prod-card-fill .prod-img {
+  height: 100%;
+  width: 100%;
+  aspect-ratio: auto;
+  background: transparent url("../images/Rectangle 45.png") center/cover no-repeat;
+  display: block;
+  padding: 0;
+  line-height: 0;
+  flex: 1 1 auto;
+}
+
+.prod-card.prod-card-fill .prod-img img {
+  display: none;
+}
+
 .prod-card .flip {
   position: relative;
   width: 100%;
@@ -1232,6 +1261,12 @@ img.youtubeplaybtn {
   padding: 18px;
   font-family: gilory;
 }
+
+/* Flip back color modifiers (per product) */
+.prod-card.bt-purple .back-top { background: #5B24AA; }
+.prod-card.bt-yellow .back-top { background: #f19f19; }
+.prod-card.bt-red    .back-top { background: #e53935; }
+.prod-card.bt-blue   .back-top { background: #0433fe; }
 
 .prod-card .prod-info {
   background: #5B24AA;
@@ -1308,6 +1343,22 @@ img.youtubeplaybtn {
   flex: 0 0 calc((100% - 2 * 18px) / 3);
   /* subtract track gap space for 3 slides */
   box-sizing: border-box;
+  transition: transform 0.35s ease, flex-basis 0.35s ease, max-width 0.35s ease;
+  transform-origin: center center;
+}
+
+@media (min-width: 1025px) {
+  .sk-slide {
+    flex: 0 0 calc((100% - 636px) / 2);
+    max-width: calc((100% - 636px) / 2);
+  }
+
+  .sk-slide.sk-active {
+    flex: 0 0 600px;
+    max-width: 600px;
+    transform: scale(1.04);
+    z-index: 2;
+  }
 }
 
 /* image style */
