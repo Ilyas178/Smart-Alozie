@@ -689,6 +689,14 @@ img.youtubeplaybtn {
   margin: 0 auto;
 }
 
+.make-money-section .mm-notes-subline {
+  color: #777;
+  font-family: gilory;
+  font-size: 18px;
+  line-height: 30px;
+  margin: 0 0 12px;
+}
+
 .make-money-section .mm-notes-title {
   color: #3b3b3b;
   font-family: "Bricolage Grotesque";
@@ -922,6 +930,92 @@ img.youtubeplaybtn {
   position: absolute;
   left: 0;
   color: #9a9a9a;
+}
+
+/* ===== What Healthcode Is NOT Block ===== */
+.wn-block {
+  margin-top: 30px;
+}
+
+.wn-block .wn-title {
+  color: #3b3b3b;
+  text-align: center;
+  font-family: grifter;
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.wn-block .wn-subtitle,
+.wn-block .wn-footer {
+  color: #555;
+  font-family: gilory;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.wn-block .wn-subtitle {
+  margin-bottom: 24px;
+}
+
+.wn-block .wn-footer {
+  margin-top: 30px;
+}
+
+.wn-block .wn-chip-set {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.wn-block .wn-chip-set-mobile {
+  display: none;
+}
+
+.wn-block .wn-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 28px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  font-family: gilory-semibold;
+  color: #3b3b3b;
+  font-size: 17px;
+  min-width: 220px;
+  justify-content: center;
+  text-align: center;
+}
+
+.wn-block .wn-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f05136;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.wn-block .wn-icon::before,
+.wn-block .wn-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 2px;
+  background: #fff;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.wn-block .wn-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 /* ===== Healthcode Banner Section (scoped) ===== */

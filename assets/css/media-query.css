@@ -474,3 +474,29 @@
     .prod-card.featured { flex-basis: 210px; }
     .prod-card.featured .phone-frame { width: 210px; }
   }
+
+  /* What Healthcode Is NOT responsive */
+  @media (max-width: 1024px) {
+    .wn-block { padding: 34px 28px 18px; }
+    .wn-block .wn-title { font-size: 36px; }
+    .wn-block .wn-subtitle,
+    .wn-block .wn-footer { font-size: 17px; line-height: 28px; }
+    .wn-block .wn-chip { font-size: 16px; padding: 14px 24px; }
+  }
+  @media (max-width: 768px) {
+    .wn-block { margin-top: 28px; padding: 28px 20px 18px; }
+    .wn-block .wn-title { font-size: 24px; text-align: center; margin-bottom: 12px; }
+    .wn-block .wn-subtitle,
+    .wn-block .wn-footer { font-size: 15px; line-height: 26px; text-align: center; }
+    .wn-block .wn-chip-set-desktop { display: none; }
+    .wn-block .wn-chip-set-mobile { display: flex; flex-direction: column; gap: 14px; }
+    .wn-block .wn-chip { width: 100%; justify-content: center; min-width: 0; }
+  }
+  @media (max-width: 520px) {
+    .wn-block { padding: 24px 16px 18px; }
+    .wn-block .wn-title { font-size: 22px; }
+    .wn-block .wn-chip { font-size: 14px; padding: 12px 18px; }
+    .wn-block .wn-icon { width: 20px; height: 20px; }
+    .wn-block .wn-icon::before,
+    .wn-block .wn-icon::after { width: 8px; }
+  }
