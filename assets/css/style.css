@@ -1260,6 +1260,16 @@ img.youtubeplaybtn {
   text-align: center;
   padding: 18px;
   font-family: gilory;
+  position: relative;
+  padding-top: 70px;
+}
+
+/* Place the Healthcode logo at the top for all flip cards */
+.prod-back .back-top .hc-logo {
+  position: absolute !important;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* Flip back color modifiers (per product) */
