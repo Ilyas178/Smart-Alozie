@@ -1343,14 +1343,14 @@ img.youtubeplaybtn {
   align-items: center;
   transition: transform 500ms ease;
   will-change: transform;
-  gap: 18px;
+  gap: 28px;
   /* visual gap between slides (like screenshot) */
   box-sizing: border-box;
 }
 
 /* each slide: show exactly 3 in viewport */
 .sk-slide {
-  flex: 0 0 calc((100% - 2 * 18px) / 3);
+  flex: 0 0 calc((100% - 2 * 28px) / 3);
   /* subtract track gap space for 3 slides */
   box-sizing: border-box;
   transition: transform 0.35s ease, flex-basis 0.35s ease, max-width 0.35s ease;
@@ -1377,7 +1377,7 @@ img.youtubeplaybtn {
   height: 347px;
   object-fit: cover;
   display: block;
-  border-radius: 6px;
+  border-radius: 20px;
 }
 
 /* --------- DOTS (screenshot-style: white border + inner yellow + glow) ------------ */
