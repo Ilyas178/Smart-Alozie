@@ -303,7 +303,7 @@ body {
 }
 
 .about-content h5 {
-  color: #5d1eb4;
+  color: #100db0;
   font-size: 28px;
   font-weight: 600;
   line-height: normal;
@@ -350,7 +350,7 @@ span.yellow {
 }
 
 span.weeks {
-  background: #5d1eb4;
+  background: #100db0;
   padding: 8px;
   border-radius: 15px;
   color: white;
@@ -788,7 +788,7 @@ img.youtubeplaybtn {
 }
 
 .success-story-section .ss-pill.purple {
-  background: #5d1eb4;
+  background: #100db0;
 }
 
 .success-story-section .ss-note {
@@ -847,7 +847,7 @@ img.youtubeplaybtn {
 }
 
 .opportunity-section .op-pill.purple {
-  background: #5d1eb4;
+  background: #100db0;
 }
 
 .opportunity-section .op-pill.yellow {
@@ -1288,13 +1288,13 @@ img.youtubeplaybtn {
 }
 
 /* Flip back color modifiers (per product) */
-.prod-card.bt-purple .back-top { background: #5B24AA; }
+.prod-card.bt-purple .back-top { background: #100db0; }
 .prod-card.bt-yellow .back-top { background: #f19f19; }
 .prod-card.bt-red    .back-top { background: #e53935; }
 .prod-card.bt-blue   .back-top { background: #0433fe; }
 
 .prod-card .prod-info {
-  background: #5B24AA;
+  background: #100db0;
   color: #fff;
   padding: 16px 16px;
   text-align: center;
@@ -1480,7 +1480,7 @@ img.youtubeplaybtn {
 }
 
 .about-content h5 {
-  color: #5d1eb4;
+  color: #100db0;
   font-size: 28px;
   font-weight: 600;
   line-height: normal;

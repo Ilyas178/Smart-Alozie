@@ -299,16 +299,14 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const setupInfiniteLoop = () => {
-    const spv = getSlidesPerView();
-    if (spv === 3 && originalSlides.length === 3) {
-      // Clone last slide to beginning and first slide to end for seamless loop
-      const lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
-      const firstClone = originalSlides[0].cloneNode(true);
-      lastClone.classList.add('clone', 'clone-start');
-      firstClone.classList.add('clone', 'clone-end');
-      track.insertBefore(lastClone, originalSlides[0]);
-      track.appendChild(firstClone);
-    }
+    if (!originalSlides.length) return;
+    // Always add one clone to start and end for seamless loop on all devices
+    const lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
+    const firstClone = originalSlides[0].cloneNode(true);
+    lastClone.classList.add('clone', 'clone-start');
+    firstClone.classList.add('clone', 'clone-end');
+    track.insertBefore(lastClone, originalSlides[0]);
+    track.appendChild(firstClone);
   };
 
   setupInfiniteLoop();
@@ -363,80 +361,54 @@ document.addEventListener("DOMContentLoaded", function () {
     const wrappingForward = (wasSelected === realSlides.length - 1 && i === 0);
     const wrappingBackward = (wasSelected === 0 && i === realSlides.length - 1);
     selected = i;
-    const spv = getSlidesPerView();
-    
-    if (spv === 3 && realSlides.length === 3) {
-      // For desktop with 3 slides and infinite loop
-      const slideWidth = slides[0].getBoundingClientRect().width;
-      const gap = getGap();
-      const sliderContainer = track.parentElement;
-      const containerWidth = sliderContainer.getBoundingClientRect().width;
-      
-      // Get actual padding from slider container (not track)
-      const containerStyles = getComputedStyle(sliderContainer);
-      const containerPaddingLeft = parseFloat(containerStyles.paddingLeft) || 25;
-      
-      // Find the visual index (including clones) we should scroll to
-      // Base mapping: real slide i -> visual index i+1 (since index 0 is clone-start)
-      // When wrapping forward last->first, target the clone-end (visual index realSlides.length + 1)
-      // When wrapping backward first->last, target the clone-start (visual index 0)
-      const realSlideIndex = wrappingForward
-        ? (realSlides.length + 1)
-        : wrappingBackward
-          ? 0
-          : (selected + 1);
-      
-      // Calculate position: (realSlideIndex * (slideWidth + gap))
-      const slideAbsolutePosition = containerPaddingLeft + (realSlideIndex * (slideWidth + gap));
-      
-      // Calculate where the center of the viewport is
-      const viewportCenter = containerWidth / 2;
-      
-      // Calculate how much we need to shift the track so selected slide's center aligns with viewport center
-      const slideCenter = slideAbsolutePosition + (slideWidth / 2);
-      const offsetNeeded = slideCenter - viewportCenter;
-      
-      // Apply transition
-      if (smooth) {
-        track.style.transition = 'transform 0.6s ease-in-out';
-      } else {
-        track.style.transition = 'none';
-      }
-      
-      track.style.transform = `translateX(-${offsetNeeded}px)`;
-      
-      // Handle seamless loop - if we're at the clone, jump to real slide
-      setTimeout(() => {
-        const containerPaddingLeft = parseFloat(getComputedStyle(sliderContainer).paddingLeft) || 25;
-        
-        if (realSlideIndex === 0) {
-          // We're at clone-start, jump to last real slide position
-          const lastRealPosition = containerPaddingLeft + (realSlides.length * (slideWidth + gap));
-          const lastSlideCenter = lastRealPosition + (slideWidth / 2);
-          const jumpOffset = lastSlideCenter - viewportCenter;
-          track.style.transition = 'none';
-          track.style.transform = `translateX(-${jumpOffset}px)`;
-        } else if (realSlideIndex === realSlides.length + 1) {
-          // We're at clone-end, jump to first real slide position
-          const firstRealPosition = containerPaddingLeft + (1 * (slideWidth + gap));
-          const firstSlideCenter = firstRealPosition + (slideWidth / 2);
-          const jumpOffset = firstSlideCenter - viewportCenter;
-          track.style.transition = 'none';
-          track.style.transform = `translateX(-${jumpOffset}px)`;
-        }
-        isTransitioning = false;
-      }, smooth ? 600 : 0);
-      
-      isTransitioning = true;
-    } else {
-      // For mobile/tablet or other cases
-    const frameIndex = computeFrameIndex(selected);
     const slideWidth = slides[0].getBoundingClientRect().width;
-      const gap = getGap();
-      const offset = frameIndex * (slideWidth + gap);
-    track.style.transform = `translateX(-${offset}px)`;
+    const gap = getGap();
+    const sliderContainer = track.parentElement;
+    const containerWidth = sliderContainer.getBoundingClientRect().width;
+
+    // Get actual padding from slider container (not track)
+    const containerStyles = getComputedStyle(sliderContainer);
+    const containerPaddingLeft = parseFloat(containerStyles.paddingLeft) || 25;
+
+    // Visual index with clones present
+    const visualIndex = wrappingForward
+      ? (realSlides.length + 1)
+      : wrappingBackward
+        ? 0
+        : (selected + 1);
+
+    // Center the selected slide
+    const slideAbsolutePosition = containerPaddingLeft + (visualIndex * (slideWidth + gap));
+    const viewportCenter = containerWidth / 2;
+    const slideCenter = slideAbsolutePosition + (slideWidth / 2);
+    const offsetNeeded = slideCenter - viewportCenter;
+
+    // Apply transition
+    track.style.transition = smooth ? 'transform 0.6s ease-in-out' : 'none';
+    track.style.transform = `translateX(-${offsetNeeded}px)`;
+
+    // After animation, if we landed on a clone, jump to the corresponding real slide without animation
+    setTimeout(() => {
+      const padLeft = parseFloat(getComputedStyle(sliderContainer).paddingLeft) || 25;
+      if (visualIndex === 0) {
+        // Jump to last real slide
+        const lastRealPosition = padLeft + (realSlides.length * (slideWidth + gap));
+        const lastSlideCenter = lastRealPosition + (slideWidth / 2);
+        const jumpOffset = lastSlideCenter - viewportCenter;
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${jumpOffset}px)`;
+      } else if (visualIndex === realSlides.length + 1) {
+        // Jump to first real slide
+        const firstRealPosition = padLeft + (1 * (slideWidth + gap));
+        const firstSlideCenter = firstRealPosition + (slideWidth / 2);
+        const jumpOffset = firstSlideCenter - viewportCenter;
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${jumpOffset}px)`;
+      }
       isTransitioning = false;
-    }
+    }, smooth ? 600 : 0);
+
+    isTransitioning = true;
     
     activateDot(selected);
     activateSlideClass(selected);
@@ -469,7 +441,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize with center slide (index 1) - no smooth transition on load
   setTimeout(() => {
     goToSlide(1, false);
-  start();
+    start();
   }, 100);
 });
 
