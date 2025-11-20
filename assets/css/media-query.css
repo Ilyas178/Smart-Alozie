@@ -747,4 +747,8 @@
       border-radius: 23.293px;
       font-size: 12px;
     }
+
+    .prod-back .back-top .hc-logo {
+      width: 80px !important;
+    }
   }

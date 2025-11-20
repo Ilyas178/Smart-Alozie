@@ -1068,6 +1068,13 @@ img.youtubeplaybtn {
   justify-content: center;
 }
 
+@media (max-width: 520px) {
+  .hc-banner-section .hc-logo {
+    width: 80px !important;
+    height: auto;
+  }
+}
+
 .hc-banner-section .hc-kicker {
   text-align: center;
   letter-spacing: 1.2px;
@@ -1232,6 +1239,10 @@ img.youtubeplaybtn {
 }
 
 .prod-card.is-flipped .flip {
+  transform: rotateY(180deg);
+}
+
+.prod-card:hover .flip {
   transform: rotateY(180deg);
 }
 

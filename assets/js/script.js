@@ -74,156 +74,8 @@ document.addEventListener("DOMContentLoaded", function () {
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 })();
 
-
-
 // (Header/hero mobile menu removed)
-
-document.addEventListener("DOMContentLoaded", function () {
-  const track = document.querySelector(".slides-track");
-  if (!track) return;
-  let originalSlides = Array.from(track.children);
-  const dots = Array.from(document.querySelectorAll(".slider-dots .dot"));
-  let selected = 1; // Start with center slide (index 1) active
-  let timer;
-  let isTransitioning = false;
-
-  // Clone slides for infinite loop (only on desktop)
-  const getSlidesPerView = () => {
-    if (window.matchMedia("(max-width: 767px)").matches) return 1; // mobile
-    if (window.matchMedia("(max-width: 1024px)").matches) return 2; // tablet
-    return 3; // desktop
-  };
-
-  const setupInfiniteLoop = () => {
-    const spv = getSlidesPerView();
-    if (spv === 3 && originalSlides.length === 3) {
-      // Clone last slide to beginning and first slide to end for seamless loop
-      const lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
-      const firstClone = originalSlides[0].cloneNode(true);
-      lastClone.classList.add('clone', 'clone-start');
-      firstClone.classList.add('clone', 'clone-end');
-      track.insertBefore(lastClone, originalSlides[0]);
-      track.appendChild(firstClone);
-    }
-  };
-
-  setupInfiniteLoop();
-  const slides = Array.from(track.children);
-  const realSlides = slides.filter(s => !s.classList.contains('clone'));
-
-  const getGap = () => {
-    const styles = getComputedStyle(track);
-    const gap = parseFloat(styles.gap || styles.columnGap || 0);
-    return isNaN(gap) ? 0 : gap;
-  };
-
-  const activateDot = (i) => {
-    dots.forEach((d) => d.classList.toggle("active", Number(d.dataset.index) === i));
-  };
-
-  const activateSlideClass = (i) => {
-    realSlides.forEach((s, idx) => s.classList.toggle("active", idx === i));
-  };
-
-  const computeFrameIndex = (targetSlideIdx) => {
-    const spv = getSlidesPerView();
-    if (slides.length <= spv) return 0; // nothing to scroll
-    
-    // For desktop (3 slides visible), center the target slide
-    if (spv === 3) {
-      // Center slide: show target-1, target, target+1
-      // For slide 0: show 0,1,2 (frame 0)
-      if (targetSlideIdx === 0) return 0;
-      // For slide 1: show 0,1,2 (frame 0) - center is at index 1
-      if (targetSlideIdx === 1) return 0;
-      // For slide 2: show 0,1,2 (frame 0) - but we want to center slide 2
-      // Actually, with 3 slides total, we can only show one frame: 0,1,2
-      // So we need to center by adjusting the offset within the frame
-      return 0; // Always show frame 0 for 3 slides
-    }
-    
-    // For mobile/tablet, go directly to that slide
-    const maxFrame = slides.length - spv;
-    return Math.min(targetSlideIdx, maxFrame);
-  };
-
-  const goToSlide = (i, smooth = true) => {
-    if (isTransitioning) return;
-    
-    // Normalize index for real slides
-    if (i < 0) i = realSlides.length - 1;
-    if (i >= realSlides.length) i = 0;
-    
-    selected = i;
-    const spv = getSlidesPerView();
-    
-    if (spv === 3 && realSlides.length === 3) {
-      // For desktop with 3 slides - always show all 3 real slides
-      // Structure: [clone-last (index 0), real-0 (index 1), real-1 (index 2), real-2 (index 3), clone-first (index 4)]
-      const gap = getGap();
-      
-      // Get the first clone (index 0) - this is the clone of the last slide
-      const firstClone = slides[0];
-      const firstCloneWidth = firstClone.getBoundingClientRect().width;
-      
-      // Calculate offset: move track left by clone width + gap
-      // This positions the first real slide (index 1) at the left edge of container
-      const offsetNeeded = firstCloneWidth + gap;
-      
-      // Apply transition
-      if (smooth) {
-        track.style.transition = 'transform 0.6s ease-in-out';
-      } else {
-        track.style.transition = 'none';
-      }
-      
-      // Position track to show all 3 real slides
-      track.style.transform = `translateX(-${offsetNeeded}px)`;
-      isTransitioning = false;
-    } else {
-      // For mobile/tablet or other cases
-    const frameIndex = computeFrameIndex(selected);
-    const slideWidth = slides[0].getBoundingClientRect().width;
-      const gap = getGap();
-      const offset = frameIndex * (slideWidth + gap);
-    track.style.transform = `translateX(-${offset}px)`;
-      isTransitioning = false;
-    }
-    
-    activateDot(selected);
-    activateSlideClass(selected);
-  };
-
-  const next = () => {
-    const nextIndex = (selected + 1) % realSlides.length;
-    goToSlide(nextIndex);
-  };
-  
-  const start = () => (timer = setInterval(next, 4000));
-  const stop = () => clearInterval(timer);
-
-  const restart = () => {
-    stop();
-    start();
-  };
-
-  dots.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      goToSlide(Number(btn.dataset.index));
-      restart();
-    });
-  });
-
-  window.addEventListener("resize", () => {
-    setTimeout(() => goToSlide(selected, false), 100);
-  });
-
-  // Initialize with center slide (index 1) - no smooth transition on load
-  setTimeout(() => {
-    goToSlide(1, false);
-  start();
-  }, 100);
-});
+// Duplicate hero slider init removed — using the single implementation later in this file.
 
 // Animate Healthcode banner when in view
 document.addEventListener("DOMContentLoaded", function () {
@@ -348,19 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
   setTimeout(updateActive, 120);
 });
 
-// Flip card toggle for products
-document.addEventListener("DOMContentLoaded", function () {
-  const productsTrack = document.getElementById('productsTrack');
-  if (!productsTrack) return;
-
-  productsTrack.addEventListener('click', function (e) {
-    const flip = e.target.closest('.flip');
-    if (!flip || !productsTrack.contains(flip)) return;
-    const card = flip.closest('.prod-card');
-    if (!card) return;
-    card.classList.toggle('is-flipped');
-  });
-});
+// Flip on hover only: removed click-to-flip handler
 
 // (Header/hero slider removed)
 
@@ -518,6 +358,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (i < 0) i = realSlides.length - 1;
     if (i >= realSlides.length) i = 0;
     
+    // Determine wrap direction before updating selected
+    const wasSelected = selected;
+    const wrappingForward = (wasSelected === realSlides.length - 1 && i === 0);
+    const wrappingBackward = (wasSelected === 0 && i === realSlides.length - 1);
     selected = i;
     const spv = getSlidesPerView();
     
@@ -532,10 +376,15 @@ document.addEventListener("DOMContentLoaded", function () {
       const containerStyles = getComputedStyle(sliderContainer);
       const containerPaddingLeft = parseFloat(containerStyles.paddingLeft) || 25;
       
-      // Find the actual slide element (including clones)
-      // selected = 0 means first real slide, but we need to account for clone at start
-      // Clone at start is index 0, then real slides start at index 1
-      const realSlideIndex = selected + 1; // +1 because clone is at index 0
+      // Find the visual index (including clones) we should scroll to
+      // Base mapping: real slide i -> visual index i+1 (since index 0 is clone-start)
+      // When wrapping forward last->first, target the clone-end (visual index realSlides.length + 1)
+      // When wrapping backward first->last, target the clone-start (visual index 0)
+      const realSlideIndex = wrappingForward
+        ? (realSlides.length + 1)
+        : wrappingBackward
+          ? 0
+          : (selected + 1);
       
       // Calculate position: (realSlideIndex * (slideWidth + gap))
       const slideAbsolutePosition = containerPaddingLeft + (realSlideIndex * (slideWidth + gap));
