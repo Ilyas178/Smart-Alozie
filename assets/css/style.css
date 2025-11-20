@@ -1288,13 +1288,13 @@ img.youtubeplaybtn {
 }
 
 /* Flip back color modifiers (per product) */
-.prod-card.bt-purple .back-top { background: #100db0; }
+.prod-card.bt-purple .back-top { background: #5B24AA; }
 .prod-card.bt-yellow .back-top { background: #f19f19; }
 .prod-card.bt-red    .back-top { background: #e53935; }
 .prod-card.bt-blue   .back-top { background: #0433fe; }
 
 .prod-card .prod-info {
-  background: #100db0;
+  background: #5B24AA;
   color: #fff;
   padding: 16px 16px;
   text-align: center;
@@ -1691,4 +1691,11 @@ span.weeks {
     max-width: 100% !important;
     margin: 0 auto;
     padding: 0px !important;
+}
+
+/* Scope: active slider slide should use the requested purple for its flip-back and info area
+   This ensures only the visible/active slide shows the #5B24AA background on flip/hover. */
+.sk-slide.sk-active .prod-card .prod-back .back-top,
+.sk-slide.sk-active .prod-card .prod-info {
+  background: #5B24AA !important;
 }
