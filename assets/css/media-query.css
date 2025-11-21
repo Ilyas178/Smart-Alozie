@@ -375,7 +375,7 @@
 
 @media (max-width: 420px) {
   .controlsdiv {
-    gap: 40px
+    gap: 10px
   }
 
   .video-controls {
@@ -1182,8 +1182,15 @@
   }
 
   .mainfootervideo-contrls {
-        flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 30px;
+    gap: 0px;
+  }
+
+  .mainfootervideo-contrls p {
+    font-size: 8px;
+  }
+
+  .footer-section a {
+    font-size: 8px;
+    padding: 6px;
   }
 }

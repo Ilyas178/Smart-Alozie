@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // After moving, update active (scroll event will also fire)
     updateActive();
   };
-  const startLoop = () => (autoTimer = setInterval(step, 2500));
+  const startLoop = () => (autoTimer = setInterval(step, 2000));
   const stopLoop = () => clearInterval(autoTimer);
   startLoop();
 
@@ -200,7 +200,50 @@ document.addEventListener("DOMContentLoaded", function () {
   setTimeout(updateActive, 120);
 });
 
-// Flip on hover only: removed click-to-flip handler
+
+// Flip card: hover for desktop, click for mobile
+
+// Flip card: hover for desktop, click for mobile (robust)
+function setupFlipCardEvents() {
+  const isMobile = () => window.matchMedia("(max-width: 767px)").matches;
+  const sliderCards = document.querySelectorAll('.sk-slide .prod-card');
+  sliderCards.forEach(card => {
+    // Remove previous listeners by replacing with clone
+    const newCard = card.cloneNode(true);
+    card.parentNode.replaceChild(newCard, card);
+  });
+  // Re-select after cloning
+  const cards = document.querySelectorAll('.sk-slide .prod-card');
+  cards.forEach(card => {
+    if (isMobile()) {
+      const img = card.querySelector('.prod-img');
+      const back = card.querySelector('.prod-back');
+      if (img) {
+        img.addEventListener('click', function (e) {
+          e.stopPropagation();
+          card.classList.toggle('is-flipped');
+        });
+      }
+      if (back) {
+        back.addEventListener('click', function (e) {
+          e.stopPropagation();
+          card.classList.toggle('is-flipped');
+        });
+      }
+    } else {
+      card.addEventListener('mouseenter', function () {
+        card.classList.add('is-flipped');
+      });
+      card.addEventListener('mouseleave', function () {
+        card.classList.remove('is-flipped');
+      });
+    }
+  });
+}
+document.addEventListener("DOMContentLoaded", setupFlipCardEvents);
+window.addEventListener('resize', function () {
+  setTimeout(setupFlipCardEvents, 100);
+});
 
 // (Header/hero slider removed)
 
@@ -526,7 +569,7 @@ document.addEventListener("DOMContentLoaded", function () {
       track.scrollTo({ left: next, behavior: 'smooth' });
     }
   };
-  const startLoop = () => (autoTimer = setInterval(step, 2500));
+  const startLoop = () => (autoTimer = setInterval(step, 2000));
   const stopLoop = () => clearInterval(autoTimer);
   startLoop();
 
